@@ -27,9 +27,11 @@ class BotmanController extends Controller
         $botman = BotManFactory::create($config, new LaravelCache());
 
         // Give the bot something to listen for.
-        $botman->hears('My name is {name}', function (BotMan $bot, $name) {
-            $bot->reply('Hello yourself, you good looking ' . $name);
-        });
+        $botman->hears('My name {name}', 'App\Http\Controllers\MyBotCommandsController@myName');
+
+        $botman->hears('foo', 'App\Http\Controllers\MyBotCommandsController@handleFoo');
+
+        $botman->hears('Payment Terms', 'App\Http\Controllers\MyBotCommandsController@paymentTerms');
 
         $botman->fallback(function($bot) {
             $bot->reply('Sorry, I did not understand these commands. Here is a list of commands I understand: ...');
